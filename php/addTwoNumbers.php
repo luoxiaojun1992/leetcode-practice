@@ -36,8 +36,8 @@ class Solution {
                 $currentBit = $newSum;
             }
 
-            $l1 = $l1->next;
-            $l2 = $l2->next;
+            $l1 = $l1 ? $l1->next : null;
+            $l2 = $l2 ? $l2->next : null;
         }
 
         return $sum ? : new ListNode(0);
