@@ -36,6 +36,11 @@ class Solution {
      */
     function inorderTraversal($root) {
         $result = [];
+
+        if (is_null($root)) {
+            return $result;
+        }
+
         if (!is_null($root->left)) {
             $result = array_merge($result, $this->inorderTraversal($root->left));
         }
