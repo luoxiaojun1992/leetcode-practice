@@ -8,7 +8,6 @@ class Solution {
      */
     function verifyPostorder($postorder)
     {
-        $verifyPostorderFunc = null;
         $verifyPostorderFunc = function ($postorder, $lt = null, $gt = null) use (&$verifyPostorderFunc) {
             $rootNode = array_pop($postorder);
             $prevNode = array_pop($postorder);
@@ -62,33 +61,23 @@ class Solution {
                         $resultWhenRightLeftNode = $prevPrevNode < $rootNode;
                         if ($resultWhenRightLeftNode) {
                             $subPostorder = $postorder;
-                            $newLt = array_pop($subPostorder);
-                            if (!is_null($lt)) {
-                                if ($lt < $newLt) {
-                                    $newLt = $lt;
-                                }
-                            }
                             array_pop($subPostorder);
+                            $lt = array_pop($subPostorder);
                             $resultWhenRightLeftNode = call_user_func(
                                 $verifyPostorderFunc,
                                 $subPostorder,
-                                $newLt,
-                                null
+                                $lt,
+                                $gt
                             );
                         }
 
                         $subPostorder = $postorder;
-                        $newGt = array_pop($subPostorder);
-                        if (!is_null($gt)) {
-                            if ($gt > $newGt) {
-                                $newGt = $gt;
-                            }
-                        }
+                        $gt = array_pop($subPostorder);
                         $resultWhenRightSubNode = call_user_func(
                             $verifyPostorderFunc,
                             $subPostorder,
-                            null,
-                            $newGt
+                            $lt,
+                            $gt
                         );
 
                         $resultWhenRightNode = $resultWhenRightLeftNode || $resultWhenRightSubNode;
@@ -103,17 +92,12 @@ class Solution {
                 $resultWhenLeftNode = $prevNode < $rootNode;
                 if ($resultWhenLeftNode) {
                     $subPostorder = $postorder;
-                    $newLt = array_pop($subPostorder);
-                    if (!is_null($lt)) {
-                        if ($lt < $newLt) {
-                            $newLt = $lt;
-                        }
-                    }
+                    $lt = array_pop($subPostorder);
                     $resultWhenLeftNode = call_user_func(
                         $verifyPostorderFunc,
                         $subPostorder,
-                        $newLt,
-                        null
+                        $lt,
+                        $gt
                     );
                 }
             } else {
@@ -128,5 +112,5 @@ class Solution {
 }
 
 var_dump(
-    (new Solution())->verifyPostorder([1,2,5,10,6,9,4,3])
+    (new Solution())->verifyPostorder([4, 8, 6, 12, 16, 14, 10])
 );
