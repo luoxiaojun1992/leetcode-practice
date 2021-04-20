@@ -8,106 +8,29 @@ class Solution {
      */
     function verifyPostorder($postorder)
     {
-        $verifyPostorderFunc = function ($postorder, $lt = null, $gt = null) use (&$verifyPostorderFunc) {
-            $rootNode = array_pop($postorder);
-            $prevNode = array_pop($postorder);
-            $prevPrevNode = array_pop($postorder);
-            if (!is_null($prevPrevNode)) {
-                if (!is_null($lt)) {
-                    if ($prevPrevNode > $lt) {
-                        return false;
-                    }
-                }
-                if (!is_null($gt)) {
-                    if ($prevPrevNode < $gt) {
-                        return false;
-                    }
-                }
-                array_push($postorder, $prevPrevNode);
-            }
-            if (!is_null($prevNode)) {
-                if (!is_null($lt)) {
-                    if ($prevNode > $lt) {
-                        return false;
-                    }
-                }
-                if (!is_null($gt)) {
-                    if ($prevNode < $gt) {
-                        return false;
-                    }
-                }
-                array_push($postorder, $prevNode);
-            }
-            if (!is_null($rootNode)) {
-                if (!is_null($lt)) {
-                    if ($rootNode > $lt) {
-                        return false;
-                    }
-                }
-                if (!is_null($gt)) {
-                    if ($rootNode < $gt) {
-                        return false;
-                    }
-                }
-                array_push($postorder, $rootNode);
-            }
+        if (empty($postorder)) {
+            return true;
+        }
 
-            //right node
-            if ((!is_null($prevNode)) && (!is_null($rootNode))) {
-                $resultWhenRightNode = $prevNode > $rootNode;
-                if ($resultWhenRightNode) {
-                    if (!is_null($prevPrevNode)) {
-                        //left node
-                        $resultWhenRightLeftNode = $prevPrevNode < $rootNode;
-                        if ($resultWhenRightLeftNode) {
-                            $subPostorder = $postorder;
-                            array_pop($subPostorder);
-                            $lt = array_pop($subPostorder);
-                            $resultWhenRightLeftNode = call_user_func(
-                                $verifyPostorderFunc,
-                                $subPostorder,
-                                $lt,
-                                $gt
-                            );
-                        }
+        $root = array_pop($postorder);
+        $rightSubTree = [];
+        $leftSubTree = [];
+        $hasLeftTree = false;
 
-                        $subPostorder = $postorder;
-                        $gt = array_pop($subPostorder);
-                        $resultWhenRightSubNode = call_user_func(
-                            $verifyPostorderFunc,
-                            $subPostorder,
-                            $lt,
-                            $gt
-                        );
-
-                        $resultWhenRightNode = $resultWhenRightLeftNode || $resultWhenRightSubNode;
-                    }
+        while (!is_null($node = array_pop($postorder))) {
+            if ($node > $root) {
+                if ($hasLeftTree) {
+                    return false;
                 }
+
+                array_unshift($rightSubTree, $node);
             } else {
-                $resultWhenRightNode = true;
+                $hasLeftTree = true;
+                array_unshift($leftSubTree, $node);
             }
+        }
 
-            //left node
-            if ((!is_null($prevNode)) && (!is_null($rootNode))) {
-                $resultWhenLeftNode = $prevNode < $rootNode;
-                if ($resultWhenLeftNode) {
-                    $subPostorder = $postorder;
-                    $lt = array_pop($subPostorder);
-                    $resultWhenLeftNode = call_user_func(
-                        $verifyPostorderFunc,
-                        $subPostorder,
-                        $lt,
-                        $gt
-                    );
-                }
-            } else {
-                $resultWhenLeftNode = true;
-            }
-
-            return $resultWhenRightNode || $resultWhenLeftNode;
-        };
-
-        return call_user_func($verifyPostorderFunc, $postorder);
+        return $this->verifyPostorder($leftSubTree) && $this->verifyPostorder($rightSubTree);
     }
 }
 
