@@ -9,11 +9,9 @@ class Solution {
     function permute($nums) {
         $combinations = [];
         foreach ($nums as $numIndex => $num) {
-            $firstNum = $num;
-            $firstNumIndex = $numIndex;
             $subNums = [];
             foreach ($nums as $subNumIndex => $subNum) {
-                if ($subNumIndex === $firstNumIndex) {
+                if ($subNumIndex === $numIndex) {
                     continue;
                 }
                 $subNums[] = $subNum;
@@ -21,10 +19,10 @@ class Solution {
             if (count($subNums) > 0) {
                 $subCombinations = $this->permute($subNums);
                 foreach ($subCombinations as $subCombinationIndex => $subCombination) {
-                    $combinations[] = array_merge([$firstNum], $subCombination);
+                    $combinations[] = array_merge([$num], $subCombination);
                 }
             } else {
-                $combinations[] = [$firstNum];
+                $combinations[] = [$num];
             }
         }
         return $combinations;
