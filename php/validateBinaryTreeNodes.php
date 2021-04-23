@@ -9,59 +9,78 @@ class Solution {
      * @return Boolean
      */
     function validateBinaryTreeNodes($n, $leftChild, $rightChild) {
-        $subNodes = [];
+        $inDeg = [];
+
         for ($i = 0; $i < $n; ++$i) {
-            $leftChildNode = $leftChild[$i];
-            if ($leftChildNode !== -1) {
-                if (isset($subNodes[$leftChildNode])) {
-                    return false;
-                }
-                $subNodes[$leftChildNode] = true;
-                if ($leftChild[$leftChildNode] === $i) {
-                    return false;
-                }
-                if ($rightChild[$leftChildNode] === $i) {
-                    return false;
+            if ($leftChild[$i] !== -1) {
+                $nodeId = $leftChild[$i];
+                if (isset($inDeg[$nodeId])) {
+                    $inDeg[$nodeId] += 1;
+                } else {
+                    $inDeg[$nodeId] = 1;
                 }
             }
 
-            $rightChildNode = $rightChild[$i];
-            if ($rightChildNode !== -1) {
-                if (isset($subNodes[$rightChildNode])) {
-                    return false;
-                }
-                $subNodes[$rightChildNode] = true;
-                if ($leftChild[$rightChildNode] === $i) {
-                    return false;
-                }
-                if ($rightChild[$rightChildNode] === $i) {
-                    return false;
+            if ($rightChild[$i] !== -1) {
+                $nodeId = $rightChild[$i];
+                if (isset($inDeg[$nodeId])) {
+                    $inDeg[$nodeId] += 1;
+                } else {
+                    $inDeg[$nodeId] = 1;
                 }
             }
         }
 
-        $count = 0;
+        $root = null;
+        $zeroDegCount = 0;
         for ($i = 0; $i < $n; ++$i) {
-            if (!isset($subNodes[$i])) {
-                ++$count;
-                if ($count > 1) {
-                    return false;
-                }
-                if (($leftChild[$i] === -1) && ($rightChild[$i] === -1)) {
-                    if ($n > 1) {
+            if (isset($inDeg[$i])) {
+                if ($inDeg[$i] === 0) {
+                    ++$zeroDegCount;
+                    if ($zeroDegCount > 1) {
                         return false;
                     }
+                    $root = $i;
                 }
+            } else {
+                ++$zeroDegCount;
+                if ($zeroDegCount > 1) {
+                    return false;
+                }
+                $root = $i;
             }
         }
-        if ($count === 0) {
+        if (is_null($root)) {
             return false;
         }
 
-        return true;
+        $scanned = [];
+        $nodeCount = 0;
+        $scanNodeFunc = null;
+        $scanNodeFunc = function ($root) use ($leftChild, $rightChild, &$nodeCount, &$scanNodeFunc, &$scanned) {
+            if ($root === -1) {
+                return;
+            }
+
+            ++$nodeCount;
+            if (isset($scanned[$root])) {
+                return;
+            }
+            $scanned[$root] = true;
+
+            if ($leftChild[$root] !== -1) {
+                $scanNodeFunc($leftChild[$root]);
+            }
+            if ($rightChild[$root] !== -1) {
+                $scanNodeFunc($rightChild[$root]);
+            }
+        };
+        $scanNodeFunc($root);
+
+        return $nodeCount === $n;
     }
 }
 
 var_dump(
-    (new Solution())->validateBinaryTreeNodes(4, [1,2,0,-1], [-1,-1,-1,-1])
+    (new Solution())->validateBinaryTreeNodes(4, [1,-1,3,-1], [2,3,-1,-1])
 );
