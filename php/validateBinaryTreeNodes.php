@@ -62,10 +62,6 @@ class Solution {
     }
 }
 
-//4
-//[1,2,0,-1]
-//[-1,-1,-1,-1]
-
 var_dump(
     (new Solution())->validateBinaryTreeNodes(4, [1,2,0,-1], [-1,-1,-1,-1])
 );
