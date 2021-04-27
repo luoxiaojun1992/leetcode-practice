@@ -2,8 +2,9 @@
 
 class LRUCache {
     protected $container = [];
-    public $posMap = [];
-    public $list = [];
+    protected $containerSize = 0;
+    protected $posMap = [];
+    protected $list = [];
     protected $capacity;
 
     /**
@@ -37,12 +38,13 @@ class LRUCache {
     }
 
     function gc() {
-        if (count($this->list) > $this->capacity) {
+        if ($this->containerSize > $this->capacity) {
             $key = reset($this->list);
             if ($key !== false) {
                 $pos = key($this->list);
                 unset($this->list[$pos]);
                 unset($this->container[$key]);
+                --$this->containerSize;
                 unset($this->posMap[$key]);
             }
         }
@@ -62,6 +64,7 @@ class LRUCache {
             }
             $this->list[$pos] = $key;
             $this->posMap[$key] = $pos;
+            ++$this->containerSize;
             $this->gc();
         } else {
             $this->refresh($key);
