@@ -17,9 +17,14 @@ class Solution {
         for ($i = 0; $i < $text1Len; ++$i) {
             for ($j = 0; $j < $text2Len; ++$j) {
                 if ($text1[$i] === $text2[$j]) {
-                    $editDistance[$i][$j] = (isset($editDistance[$i - 1][$j - 1]) ? $editDistance[$i - 1][$j - 1] : 0) + 1;
+                    $editDistance[$i][$j] = max(
+                        (isset($editDistance[$i - 1][$j - 1]) ? $editDistance[$i - 1][$j - 1] : 0) + 1,
+                        (isset($editDistance[$i - 1][$j]) ? $editDistance[$i - 1][$j] : 0),
+                        (isset($editDistance[$i][$j - 1]) ? $editDistance[$i][$j - 1] : 0)
+                    );
                 } else {
                     $editDistance[$i][$j] = max(
+                        (isset($editDistance[$i - 1][$j - 1]) ? $editDistance[$i - 1][$j - 1] : 0),
                         (isset($editDistance[$i - 1][$j]) ? $editDistance[$i - 1][$j] : 0),
                         (isset($editDistance[$i][$j - 1]) ? $editDistance[$i][$j - 1] : 0)
                     );
