@@ -21,6 +21,7 @@ class Solution {
             }
             $searched[$x][$y] = true;
 
+            //Pruning
             if (($index + 1) > $wordLen) {
                 return;
             }
