@@ -23,9 +23,9 @@ class Solution
             foreach ($pageCounts as $i => $pageCount) {
                 $actualCopyTimeCost += $pageCount;
                 if ($actualCopyTimeCost >= $medianCopyTimeCost) {
-                    if (($bookCount - ($i + 1)) >= $peopleCount) {
+                    if (($bookCount - ($i + 1)) >= ($peopleCount - 1)) {
                         $remainBookCount = ($bookCount - ($i + 1));
-                        $secondMaxBookCount = $remainBookCount - ($peopleCount - 1);
+                        $secondMaxBookCount = $remainBookCount - ($peopleCount - 2);
                         $remainPageCounts = array_slice($pageCounts, $i + 1);
                         rsort($remainPageCounts);
                         $remainPageCounts = array_values($remainPageCounts);
