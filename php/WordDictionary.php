@@ -60,6 +60,9 @@ class WordDictionary {
                 }
             }
             $hashMapArr = $newHashMapArr;
+            if (empty($hashMapArr)) {
+                break;
+            }
         }
 
         if (empty($hashMapArr)) {
