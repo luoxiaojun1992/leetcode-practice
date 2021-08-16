@@ -21,10 +21,10 @@ func max(arr []int) int {
 func longestCommonSubsequence(text1 string, text2 string) int {
 	text1Len := len(text1)
 	text2Len := len(text2)
-	sLens := [][]int{}
+	sLens := make([][]int, text1Len)
 	for i := 0; i < text1Len; i++ {
-		lenArr := []int{}
-		sLens = append(sLens, lenArr)
+		lenArr := make([]int, text2Len)
+		sLens[i] = lenArr
 		for j := 0; j < text2Len; j++ {
 			currentLen := 0
 			if text1[i] == text2[j] {
@@ -47,8 +47,7 @@ func longestCommonSubsequence(text1 string, text2 string) int {
 					currentLen = currentLen + max(lastLenArr)
 				}
 			}
-			lenArr = append(lenArr, currentLen)
-			sLens[i] = lenArr
+			lenArr[j] = currentLen
 		}
 	}
 	flattenSLens := []int{}
