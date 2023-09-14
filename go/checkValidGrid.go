@@ -1,6 +1,6 @@
 package main
 
-unc checkPoint(grid [][]int, point []int, step int) bool {
+func checkPoint(grid [][]int, point []int, step int) bool {
     rowLen := len(grid)
     colLen := len(grid[0])
 
@@ -68,5 +68,5 @@ func checkValidGrid(grid [][]int) bool {
 }
 
 func main() {
-  checkValidGrid([][]int{{0, 11, 16, 5, 20}, {17, 4, 19, 10, 15}, {12, 1, 8, 21, 6}, {3, 18, 23, 14, 9}, {24, 13, 2, 7, 22}})
+  println(checkValidGrid([][]int{{0, 11, 16, 5, 20}, {17, 4, 19, 10, 15}, {12, 1, 8, 21, 6}, {3, 18, 23, 14, 9}, {24, 13, 2, 7, 22}}))
 }
